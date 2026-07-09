@@ -2,13 +2,15 @@
 
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
-import SearchBar from '@/componenets/component/map/SearchBar';
-import RegionCards from '@/componenets/component/map/RegionCards';
-import StatisticsCards from '@/componenets/component/dashboard/StatisticsCards';
-import FilterTabs from '@/componenets/component/dashboard/FilterTabs';
-import CityGrid from '@/componenets/component/map/CityGrid';
+import SearchBar from '@/components/map/SearchBar';
+import RegionCards from '@/components/map/RegionCards';
+import StatisticsCards from '@/components/dashboard/StatisticsCards';
+import FilterTabs from '@/components/dashboard/FilterTabs';
+import CityGrid from '@/components/map/CityGrid';
+import Navbar from '@/components/common/Navbar';
+import Footer from '@/components/common/footer';
 
-const MapUI = dynamic(() => import('@/componenets/component/map/MapUI'), {
+const MapUI = dynamic(() => import('@/components/map/MapUI'), {
   ssr: false,
   loading: () => <div className="w-full h-[500px] rounded-3xl bg-gray-100 animate-pulse flex items-center justify-center">Loading Map...</div>
 });
@@ -17,12 +19,10 @@ export default function MapPage() {
   const [mapCenter, setMapCenter] = useState<[number, number]>([28.6139, 77.2090]);
 
   return (
+    <div>
+      <Navbar/>
     <div className="min-h-screen p-8 bg-[#FFF9FB]">
       <div className="max-w-6xl mx-auto">
-        {/* Header - Brand Name HerMap */}
-        <div className="flex items-center mb-10">
-           <h1 className="text-4xl font-bold text-[#7E22CE] tracking-tight">HerMap</h1>
-        </div>
         
         <StatisticsCards />
         
@@ -39,5 +39,8 @@ export default function MapPage() {
         </main>
       </div>
     </div>
+      <Footer/>
+    </div>
+
   );
 }

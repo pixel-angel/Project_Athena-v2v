@@ -11,7 +11,7 @@ export default function Footer() {
             <div className="flex items-center gap-2">
               <Sparkles className="text-violet-700" size={28} />
 
-              <h2 className=" font-bold text-violet-700 text-2xl">SheMap</h2>
+              <h2 className=" font-bold text-violet-700 text-2xl">HerMap</h2>
             </div>
 
             <p className="mt-4 text-gray-600 leading-7">
@@ -44,7 +44,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 border-t pt-6 flex justify-between text-sm text-gray-500">
-          <p>© 2026 HerMap. All rights reserved.</p>
+          <p>© 2026 SheMap. All rights reserved.</p>
 
           <p className="flex items-center gap-2">
             Made with

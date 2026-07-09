@@ -8,7 +8,7 @@ export default function Navbar() {
         {/* Logo */}
         <h1 className="text-4xl font-bold text-violet-700 flex items-center gap-2">
           <Sparkles size={30}/>
-          SheMap
+          HerMap
         </h1>
 
         {/* Center Links */}

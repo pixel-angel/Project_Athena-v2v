@@ -6,7 +6,7 @@ export default function Hero() {
       {/* Badge */}
       <div className="flex justify-center">
         <span className="rounded-full bg-pink-100 px-5 py-2 text-sm font-medium text-pink-600">
-          🏆 IEEE SHE Aspire Hackathon
+          🏆 IEEE SHE Aspire 3.0 - Vibe2Vision Hackathon
         </span>
       </div>
 
