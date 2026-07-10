@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     }
 
     // Fetch reviews from Supabase
-    const { data: reviews, error } = await supabase.from("reviews").select("*");
+    const { data: reviews, error } = await supabase.from("Reviews").select("*");
 
     if (error) throw error;
 
@@ -191,7 +191,7 @@ export async function POST(req: Request) {
     console.error("API ERROR:", err);
 
     return NextResponse.json({
-      response: err.message ?? JSON.stringify(err),
+      response: "i could not fetch data on that query. sorry.",
     });
   }
 }
