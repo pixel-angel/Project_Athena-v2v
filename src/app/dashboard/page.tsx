@@ -12,6 +12,8 @@ import Link from "next/link";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/footer";
 
+export const dynamic = "force-dynamic";
+
 interface Review {
   id: string;
   region: string;
