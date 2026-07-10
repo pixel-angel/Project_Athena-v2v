@@ -77,12 +77,12 @@ export default function DashboardPage() {
     <div className="max-w-7xl mx-auto py-10 px-6">
       <DashboardHeader region={region} score={overall} />
 
-      {/* <StatsCards
-        // // overall={overall}
-        // reviews={regionReviews.length}
-        // strongest={strongest}
-        // weakest={weakest}
-      /> */}
+      <StatsCards
+        overall={overall}
+        reviews={regionReviews.length}
+        strongest={strongest}
+        weakest={weakest}
+      />
     </div>
   );
 }

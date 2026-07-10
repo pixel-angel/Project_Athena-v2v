@@ -1,22 +1,59 @@
 interface Props {
-  region: string;
-  score: number;
+  overall: number;
+
+  reviews: number;
+
+  strongest: string;
+
+  weakest: string;
 }
 
-export default function DashboardHeader({ region, score }: Props) {
+export default function StatsCards({
+  overall,
+
+  reviews,
+
+  strongest,
+
+  weakest,
+}: Props) {
+  const cards = [
+    {
+      title: "Overall",
+
+      value: overall.toFixed(1),
+    },
+
+    {
+      title: "Reviews",
+
+      value: reviews,
+    },
+
+    {
+      title: "Strongest",
+
+      value: strongest,
+    },
+
+    {
+      title: "Needs Attention",
+
+      value: weakest,
+    },
+  ];
+
   return (
-    <div className="bg-white rounded-3xl shadow-sm p-8">
-      <p className="text-gray-500">Region Dashboard</p>
+    <div className="grid md:grid-cols-4 gap-6 mt-8">
+      {cards.map((card, index) => (
+        <div key={index} className="bg-white rounded-2xl shadow-sm p-6 border">
+          <p className="text-gray-500">{card.title}</p>
 
-      <h1 className="text-4xl font-bold mt-2">📍 {region}</h1>
-
-      <div className="mt-4 flex items-center gap-4">
-        <span className="text-5xl font-bold text-violet-600">
-          {score.toFixed(1)}
-        </span>
-
-        <span className="text-xl text-gray-500">/5 Community Score</span>
-      </div>
+          <h2 className="text-3xl font-bold mt-2 text-violet-700">
+            {card.value}
+          </h2>
+        </div>
+      ))}
     </div>
   );
 }
