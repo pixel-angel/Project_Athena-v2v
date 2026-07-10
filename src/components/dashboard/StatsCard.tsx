@@ -1,5 +1,5 @@
 interface Props {
-  overall: number;
+  // overall: number;
 
   reviews: number;
 
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default function StatsCards({
-  overall,
+  // overall,
 
   reviews,
 
@@ -18,11 +18,11 @@ export default function StatsCards({
   weakest,
 }: Props) {
   const cards = [
-    {
-      title: "Overall",
+    // {
+    //   title: "Overall",
 
-      value: overall.toFixed(1),
-    },
+    //   value: overall.toFixed(1),
+    // },
 
     {
       title: "Reviews",
