@@ -193,7 +193,7 @@ export default function AssistantPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend(input)}
-            className="flex-1 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-1 focus:ring-[#6d28d9] transition-all"
+            className="flex-1 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-1 focus:ring-[#6d28d9] transition-all text-[#2d2d2d]"
             placeholder="Ask about any region's safety..."
           />
           <button
