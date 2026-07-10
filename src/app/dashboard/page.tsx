@@ -1,9 +1,7 @@
 "use client";
-
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-
+import { useSearchParams } from "next/navigation";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import StatsCards from "@/components/dashboard/StatsCard";
 import AccessibilityRadar from "@/components/dashboard/AccessibilityRadar";
@@ -14,38 +12,51 @@ import Link from "next/link";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/footer";
 
+interface Review {
+  id: string;
+  region: string;
+  street_lightening: number;
+  public_toilets: number;
+  menstrual_products: number;
+  safe_transport: number;
+  childcare_access: number;
+  comment: string;
+  image_url?: string;
+  created_at: string;
+}
 export default function DashboardPage() {
   const params = useSearchParams();
   const region = params.get("region") || "Connaught Place";
 
-  const [regionReviews, setRegionReviews] = useState<any[]>([]);
+  const [regionReviews, setRegionReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchReviews() {
       const { data, error } = await supabase
-        .from("reviews")
+        .from("Reviews")
         .select("*")
-        .eq("region", region);
+        .eq("region", region)
+        .order("created_at", { ascending: false });
 
       if (error) {
         console.error(error);
-      } else {
-        setRegionReviews(data || []);
+        return;
       }
 
+      setRegionReviews(data ?? []);
       setLoading(false);
     }
 
     fetchReviews();
   }, [region]);
 
-  function average(key: string) {
+  function average(key: keyof Review) {
     if (regionReviews.length === 0) return 0;
 
     const nums = regionReviews
       .map((r) => Number(r[key]))
-      .filter((x) => !isNaN(x));
+      .filter((n) => !isNaN(n));
 
     if (nums.length === 0) return 0;
 
@@ -57,7 +68,6 @@ export default function DashboardPage() {
   const menstrual = average("menstrual_products");
   const transport = average("safe_transport");
   const childcare = average("childcare_access");
-
   const overall = (lighting + toilets + menstrual + transport + childcare) / 5;
 
   const features = [
@@ -109,15 +119,13 @@ export default function DashboardPage() {
       rating: childcare,
     },
   ];
-
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-xl font-semibold">
-        Loading Dashboard...
+      <div className="flex h-screen items-center justify-center">
+        Loading...
       </div>
     );
   }
-
   return (
     <div>
       <Navbar />
