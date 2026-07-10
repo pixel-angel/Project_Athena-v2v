@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { cities } from "@/constants/cities";
 
 // Fix for default Leaflet icons
 delete (L.Icon.Default.prototype as any)._getIconUrl;
