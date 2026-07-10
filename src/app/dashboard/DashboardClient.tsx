@@ -127,7 +127,7 @@ export default function DashboardClients() {
     );
   }
   return (
-    <div className="min-h-screen bg-[#FFF5F2]">
+    <div className="min-h-screen bg-[#FFF5F2] text-[#2D2D2D]">
       <Navbar />
 
       <div className="max-w-7xl mx-auto py-10 px-6">
