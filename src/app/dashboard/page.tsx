@@ -1,15 +1,16 @@
-import ReviewForm from "@/components/review/ReviewForm";
-import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/footer";
+import { Suspense } from "react";
+import DashboardClient from "./DashboardClient";
 
-export default function ReviewPage() {
+export default function DashboardPage() {
   return (
-    <div>
-      <Navbar />
-    <main className="min-h-screen bg-[#FFF5F2] py-12 px-5">
-      <ReviewForm />
-    </main>
-      <Footer />
-    </div>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#FFF5F2]">
+          Loading Dashboard...
+        </div>
+      }
+    >
+      <DashboardClient />
+    </Suspense>
   );
 }

@@ -1,18 +1,19 @@
 "use client";
+
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
 import { useSearchParams } from "next/navigation";
+import { supabase } from "@/lib/supabase";
+
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import StatsCards from "@/components/dashboard/StatsCard";
 import AccessibilityRadar from "@/components/dashboard/AccessibilityRadar";
 import ReviewList from "@/components/dashboard/ReviewList";
 
-import { PencilLine, Bot } from "lucide-react";
-import Link from "next/link";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/footer";
 
-export const dynamic = "force-dynamic";
+import Link from "next/link";
+import { Bot, PencilLine } from "lucide-react";
 
 interface Review {
   id: string;
@@ -26,6 +27,7 @@ interface Review {
   image_url?: string;
   created_at: string;
 }
+
 export default function DashboardClient() {
   const params = useSearchParams();
   const region = params.get("region") || "Connaught Place";
@@ -43,10 +45,10 @@ export default function DashboardClient() {
 
       if (error) {
         console.error(error);
-        return;
+      } else {
+        setRegionReviews(data ?? []);
       }
 
-      setRegionReviews(data ?? []);
       setLoading(false);
     }
 
@@ -70,29 +72,15 @@ export default function DashboardClient() {
   const menstrual = average("menstrual_products");
   const transport = average("safe_transport");
   const childcare = average("childcare_access");
+
   const overall = (lighting + toilets + menstrual + transport + childcare) / 5;
 
   const features = [
-    {
-      name: "Street Lighting",
-      value: lighting,
-    },
-    {
-      name: "Public Toilets",
-      value: toilets,
-    },
-    {
-      name: "Menstrual Products",
-      value: menstrual,
-    },
-    {
-      name: "Safe Transport",
-      value: transport,
-    },
-    {
-      name: "Childcare",
-      value: childcare,
-    },
+    { name: "Street Lighting", value: lighting },
+    { name: "Public Toilets", value: toilets },
+    { name: "Menstrual Products", value: menstrual },
+    { name: "Safe Transport", value: transport },
+    { name: "Childcare", value: childcare },
   ];
 
   const strongest = features.reduce((a, b) => (a.value > b.value ? a : b)).name;
@@ -121,19 +109,21 @@ export default function DashboardClient() {
       rating: childcare,
     },
   ];
+
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        Loading...
+      <div className="min-h-screen bg-[#FFF5F2] flex items-center justify-center">
+        Loading Dashboard...
       </div>
     );
   }
+
   return (
-    <div>
+    <div className="min-h-screen bg-[#FFF5F2]">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto py-10 px-6">
-        <DashboardHeader region={region} score={overall} />
+      <main className="max-w-7xl mx-auto px-6 pt-28 pb-10">
+        <DashboardHeader region={region} score={Number(overall.toFixed(1))} />
 
         <StatsCards
           reviews={regionReviews.length}
@@ -148,27 +138,27 @@ export default function DashboardClient() {
         <div className="fixed bottom-8 right-8 flex flex-col gap-4 z-50">
           <Link
             href={`/assistant?region=${encodeURIComponent(region)}`}
-            className="group fixed right-8 bottom-28 z-50 flex h-14 w-14 items-center rounded-full bg-violet-700 text-white shadow-xl transition-all duration-300 hover:w-44 hover:bg-violet-800"
+            className="group flex h-14 w-14 items-center rounded-full bg-violet-700 text-white shadow-xl transition-all duration-300 hover:w-44 hover:bg-violet-800"
           >
             <Bot size={22} className="ml-4 shrink-0" />
 
-            <span className="ml-3 opacity-0 whitespace-nowrap transition-all duration-300 group-hover:opacity-100">
+            <span className="ml-3 whitespace-nowrap opacity-0 transition-all duration-300 group-hover:opacity-100">
               Ask HerBot
             </span>
           </Link>
 
           <Link
             href={`/review?region=${encodeURIComponent(region)}`}
-            className="group fixed right-8 bottom-8 z-50 flex h-14 w-14 items-center rounded-full bg-pink-600 text-white shadow-xl transition-all duration-300 hover:w-44 hover:bg-pink-700"
+            className="group flex h-14 w-14 items-center rounded-full bg-pink-600 text-white shadow-xl transition-all duration-300 hover:w-44 hover:bg-pink-700"
           >
             <PencilLine size={22} className="ml-4 shrink-0" />
 
-            <span className="ml-3 opacity-0 whitespace-nowrap transition-all duration-300 group-hover:opacity-100">
+            <span className="ml-3 whitespace-nowrap opacity-0 transition-all duration-300 group-hover:opacity-100">
               Write Review
             </span>
           </Link>
         </div>
-      </div>
+      </main>
 
       <Footer />
     </div>

@@ -4,7 +4,7 @@ import Footer from "@/components/common/footer";
 
 export default function ReviewPage() {
   return (
-    <div>
+    <div className=>
       <Navbar />
     <main className="min-h-screen bg-[#FFF5F2] py-12 px-5">
       <ReviewForm />
