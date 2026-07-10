@@ -1,4 +1,12 @@
-export const cities = [
+type City = {
+  id: number;
+  name: string;
+  coords: [number, number];
+  score: number;
+};
+
+
+export const cities : City[] =[
   // Delhi & NCR
   { id: 1, name: "Connaught Place", coords: [28.6328, 77.2197], score: 3.4 },
   { id: 2, name: "Lajpat Nagar", coords: [28.5707, 77.2415], score: 2.9 },

@@ -1,6 +1,8 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Navbar from "@/components/common/Navbar";
+import Footer from "@/components/common/footer";
 
 export default function AssistantPage() {
   const router = useRouter();
@@ -53,7 +55,9 @@ export default function AssistantPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-200/80 flex items-center justify-center p-4">
+    <div>
+      <Navbar />
+    <div className="min-h-screen flex items-center justify-center p-4 bg-[#FFF5F2]">
       <div className="bg-white w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden flex flex-col h-[650px] border border-gray-100">
         {/* Header */}
         <div className="bg-[#6d28d9] p-4 text-white flex justify-between items-center">
@@ -209,6 +213,8 @@ export default function AssistantPage() {
           </button>
         </div>
       </div>
+    </div>
+    <Footer />
     </div>
   );
 }

@@ -37,8 +37,28 @@ export default function MapPage() {
             <FilterTabs onFilterChange={setActiveFilter} />
             <SearchBar onSearch={setMapCenter} />
 
+            <div className="flex gap-6 mb-3 text-sm font-medium text-gray-700">
+              <div className="flex items-center gap-2">
+                <span className="w-4 h-4 rounded-full bg-green-500"></span>
+                Excellent
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="w-4 h-4 rounded-full bg-yellow-400"></span>
+                Moderate
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="w-4 h-4 rounded-full bg-red-500"></span>
+                Needs Improvement
+              </div>
+            </div>
             <div className="my-8 rounded-3xl overflow-hidden shadow-xl border border-white">
-              <MapUI center={mapCenter} activeFilter={activeFilter} />
+              <MapUI
+                center={mapCenter}
+                activeFilter={activeFilter}
+                onMarkerClick={setMapCenter}
+              />
             </div>
 
             <RegionCards center={mapCenter} activeFilter={activeFilter} />
