@@ -7,6 +7,7 @@
     "safeTransport": 5,
     "childcareAccess": 2,
     "comment": "Well lit and feels safe at night.",
+    "photo": "/images/reviews/cp1.jpg",
     "date": "2026-07-09"
   },
   {
@@ -17,6 +18,7 @@
     "safeTransport": 4,
     "childcareAccess": 2,
     "comment": "Metro is nearby. Toilets need improvement.",
+    "photo": "/images/reviews/cp2.jpg",
     "date": "2026-07-08"
   },
   {
@@ -27,6 +29,7 @@
     "safeTransport": 3,
     "childcareAccess": 1,
     "comment": "Busy market but transport is good.",
+    "photo": "/images/reviews/kb1.jpg",
     "date": "2026-07-07"
   }
 ]
