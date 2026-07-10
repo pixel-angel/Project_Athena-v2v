@@ -1,9 +1,11 @@
 "use client";
+
 import { useSearchParams } from "next/navigation";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import StatsCards from "@/components/dashboard/StatsCard";
 import AccessibilityRadar from "@/components/dashboard/AccessibilityRadar";
 import ReviewList from "@/components/dashboard/ReviewList";
+
 import { PencilLine, Bot } from "lucide-react";
 import Link from "next/link";
 import Navbar from "@/components/common/Navbar";
@@ -13,7 +15,6 @@ import { supabase } from "@/lib/supabase";
 
 export default function DashboardPage() {
   const params = useSearchParams();
-
   const region = params.get("region") || "Connaught Place";
 
 const [regionReviews, setRegionReviews] = useState<any[]>([]);
@@ -103,6 +104,14 @@ useEffect(() => {
     },
   ];
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-xl font-semibold">
+        Loading Dashboard...
+      </div>
+    );
+  }
+
   return (
     <div>
       <Navbar />
@@ -111,7 +120,6 @@ useEffect(() => {
         <DashboardHeader region={region} score={overall} />
 
         <StatsCards
-          // overall={overall}
           reviews={regionReviews.length}
           strongest={strongest}
           weakest={weakest}
@@ -120,6 +128,7 @@ useEffect(() => {
         <AccessibilityRadar data={chartData} />
 
         <ReviewList reviews={regionReviews} />
+
         <div className="fixed bottom-8 right-8 flex flex-col gap-4 z-50">
           <Link
             href={`/assistant?region=${encodeURIComponent(region)}`}
@@ -144,6 +153,7 @@ useEffect(() => {
           </Link>
         </div>
       </div>
+
       <Footer />
     </div>
   );
