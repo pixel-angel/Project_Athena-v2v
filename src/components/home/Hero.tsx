@@ -1,4 +1,5 @@
 import Link from "next/link";
+import MapPreview from "./MapPreview";
 
 export default function Hero() {
   return (
@@ -45,10 +46,9 @@ export default function Hero() {
             <h2 className="text-2xl font-bold text-violet-700">Explore Map</h2>
           </div>
 
-          <div className="flex h-64 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-100 to-pink-100">
-            <p className="text-lg font-semibold text-gray-600">
-              Interactive Map Preview
-            </p>
+          <div className="overflow-hidden rounded-2xl border h-64">
+            <MapPreview />
+            
           </div>
 
           <p className="mt-5 text-gray-600">

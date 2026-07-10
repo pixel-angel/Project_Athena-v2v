@@ -6,10 +6,10 @@ export default function Navbar() {
     <nav className="w-full border-b bg-[#f3e5f5]/30 sticky top-0 z-50 backdrop-blur-md">
       <div className="max-w-7xl mx-auto h-20 px-8 relative flex items-center">
         {/* Logo */}
-        <h1 className="text-4xl font-bold text-violet-700 flex items-center gap-2">
+        <Link href="/" className="text-4xl font-bold text-violet-700 flex items-center gap-2">
           <Sparkles size={30}/>
           HerMap
-        </h1>
+        </Link>
 
         {/* Center Links */}
         <div className="absolute left-1/2 -translate-x-1/2 flex gap-10 font-medium text-gray-700">
