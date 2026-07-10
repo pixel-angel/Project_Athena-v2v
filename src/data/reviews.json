@@ -1,0 +1,32 @@
+[
+  {
+    "region": "Connaught Place",
+    "streetLighting": 4,
+    "publicToilets": 3,
+    "menstrualProducts": 4,
+    "safeTransport": 5,
+    "childcareAccess": 2,
+    "comment": "Well lit and feels safe at night.",
+    "date": "2026-07-09"
+  },
+  {
+    "region": "Connaught Place",
+    "streetLighting": 5,
+    "publicToilets": 2,
+    "menstrualProducts": 3,
+    "safeTransport": 4,
+    "childcareAccess": 2,
+    "comment": "Metro is nearby. Toilets need improvement.",
+    "date": "2026-07-08"
+  },
+  {
+    "region": "Karol Bagh",
+    "streetLighting": 3,
+    "publicToilets": 2,
+    "menstrualProducts": 2,
+    "safeTransport": 3,
+    "childcareAccess": 1,
+    "comment": "Busy market but transport is good.",
+    "date": "2026-07-07"
+  }
+]
