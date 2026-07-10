@@ -188,7 +188,7 @@ export default function AssistantPage() {
         </div>
 
         {/* Input Area */}
-        <div className="p-4 bg-white border-t border-gray-100 flex gap-2">
+        <div className="p-4 bg-white border-t border-gray-100 flex gap-2 text-[#2d2d2d]">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
