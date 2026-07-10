@@ -1,6 +1,5 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import reviews from "@/data/reviews.json";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import StatsCards from "@/components/dashboard/StatsCard";
 import AccessibilityRadar from "@/components/dashboard/AccessibilityRadar";
@@ -9,29 +8,49 @@ import { PencilLine, Bot } from "lucide-react";
 import Link from "next/link";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/footer";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function DashboardPage() {
   const params = useSearchParams();
 
   const region = params.get("region") || "Connaught Place";
 
-  const regionReviews = reviews.filter((review) => review.region === region);
+const [regionReviews, setRegionReviews] = useState<any[]>([]);
 
-  function average(key: string) {
-    const nums = regionReviews
+useEffect(() => {
+  async function loadReviews() {
+    const { data, error } = await supabase
+      .from("Reviews")
+      .select("*")
+      .eq("region", region)
+      .order("created_at", { ascending: false });
 
-      .map((r: any) => r[key])
+    if (error) {
+      console.error(error);
+      return;
+    }
 
-      .filter((x) => x != null);
-
-    return nums.reduce((a, b) => a + b, 0) / nums.length;
+    setRegionReviews(data || []);
   }
 
-  const lighting = average("streetLighting");
-  const toilets = average("publicToilets");
-  const menstrual = average("menstrualProducts");
-  const transport = average("safeTransport");
-  const childcare = average("childcareAccess");
+  loadReviews();
+}, [region]);
+  function average(key: string) {
+  const nums = regionReviews
+    .map((r: any) => r[key])
+    .filter((x: any) => x != null);
+
+  if (nums.length === 0) return 0;
+
+  return nums.reduce((a: number, b: number) => a + b, 0) / nums.length;
+}
+
+  const lighting = average("street_lightening");
+  const toilets = average("public_toilets");
+  const menstrual = average("menstrual_products");
+  const transport = average("safe_transport");
+  const childcare = average("childcare_access");
   const overall = (lighting + toilets + menstrual + transport + childcare) / 5;
 
   const features = [
