@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import localData from "../../../data/reviews.json";
+import { supabase } from "@/lib/supabase";
 
 export async function POST(req: Request) {
   try {
     const { message } = await req.json();
     const lowerMessage = (message || "").toLowerCase();
 
-    // Greetings
+    // Greeting
     if (/\b(hi|hello|hey)\b/.test(lowerMessage)) {
       return NextResponse.json({
         response:
@@ -14,36 +14,43 @@ export async function POST(req: Request) {
       });
     }
 
-    // ---------- GROUP REVIEWS ----------
-    const grouped: Record<string, typeof localData> = {};
+    // Fetch reviews from Supabase
+    const { data: reviews, error } = await supabase.from("reviews").select("*");
 
-    for (const review of localData) {
+    if (error) throw error;
+
+    if (!reviews || reviews.length === 0) {
+      return NextResponse.json({
+        response: "No reviews have been submitted yet.",
+      });
+    }
+
+    // ---------- GROUP BY REGION ----------
+    const grouped: Record<string, any[]> = {};
+
+    for (const review of reviews) {
       if (!grouped[review.region]) grouped[review.region] = [];
       grouped[review.region].push(review);
     }
 
     function getStats(region: string) {
-      const reviews = grouped[region];
-      if (!reviews) return null;
+      const regionReviews = grouped[region];
+      if (!regionReviews) return null;
 
-      const average = (key: keyof (typeof reviews)[0]) =>
-        reviews.reduce((sum, r) => sum + Number(r[key]), 0) / reviews.length;
+      const avg = (key: string) =>
+        regionReviews.reduce((sum, r) => sum + Number(r[key]), 0) /
+        regionReviews.length;
 
-      const lighting = average("streetLighting");
-      const toilets = average("publicToilets");
-      const sanitary = average("menstrualProducts");
-      const transport = average("safeTransport");
-      const childcare = average("childcareAccess");
+      const lighting = avg("street_lighting");
+      const toilets = avg("public_toilets");
+      const sanitary = avg("menstrual_products");
+      const transport = avg("safe_transport");
+      const childcare = avg("childcare_access");
 
-      const overall =
-        (
-          (lighting +
-            toilets +
-            sanitary +
-            transport +
-            childcare) /
-          5
-        ).toFixed(1);
+      const overall = (
+        (lighting + toilets + sanitary + transport + childcare) /
+        5
+      ).toFixed(1);
 
       return {
         region,
@@ -53,28 +60,31 @@ export async function POST(req: Request) {
         transport: transport.toFixed(1),
         childcare: childcare.toFixed(1),
         overall,
-        reviews: reviews.length,
-        latestComment: reviews[reviews.length - 1].comment,
+        reviews: regionReviews.length,
+        latestComment:
+          regionReviews[regionReviews.length - 1].comment ??
+          "No comments available.",
       };
     }
 
     // ---------- SAFEST REGION ----------
     if (
       lowerMessage.includes("safest") ||
-      lowerMessage.includes("highest") ||
-      lowerMessage.includes("best")
+      lowerMessage.includes("best") ||
+      lowerMessage.includes("highest")
     ) {
       let best: any = null;
 
       for (const region of Object.keys(grouped)) {
         const stats = getStats(region);
+
         if (!best || Number(stats!.overall) > Number(best.overall)) {
           best = stats;
         }
       }
 
       return NextResponse.json({
-        response: `The safest region currently is ${best.region} with an average safety score of ${best.overall}/5 based on ${best.reviews} community reviews.`,
+        response: `The safest region currently is ${best.region} with an average score of ${best.overall}/5 based on ${best.reviews} reviews.`,
       });
     }
 
@@ -91,22 +101,22 @@ export async function POST(req: Request) {
     if (!foundRegion) {
       return NextResponse.json({
         response:
-          "I couldn't find reviews for that region yet. Try asking about Connaught Place or Karol Bagh.",
+          "I couldn't find reviews for that region yet. Please try another location.",
       });
     }
 
-    // ---------- CATEGORY RESPONSES ----------
-
+    // ---------- LIGHTING ----------
     if (
       lowerMessage.includes("light") ||
       lowerMessage.includes("lighting") ||
       lowerMessage.includes("night")
     ) {
       return NextResponse.json({
-        response: `Street lighting in ${foundRegion.region} has an average rating of ${foundRegion.lighting}/5.`,
+        response: `Street lighting in ${foundRegion.region} is rated ${foundRegion.lighting}/5.`,
       });
     }
 
+    // ---------- TOILETS ----------
     if (
       lowerMessage.includes("toilet") ||
       lowerMessage.includes("washroom") ||
@@ -117,66 +127,71 @@ export async function POST(req: Request) {
       });
     }
 
+    // ---------- TRANSPORT ----------
     if (
       lowerMessage.includes("transport") ||
-      lowerMessage.includes("bus") ||
       lowerMessage.includes("metro") ||
+      lowerMessage.includes("bus") ||
       lowerMessage.includes("cab")
     ) {
       return NextResponse.json({
-        response: `Safe transport in ${foundRegion.region} has an average rating of ${foundRegion.transport}/5.`,
+        response: `Safe transport in ${foundRegion.region} is rated ${foundRegion.transport}/5.`,
       });
     }
 
+    // ---------- SANITARY ----------
     if (
       lowerMessage.includes("sanitary") ||
-      lowerMessage.includes("hygiene") ||
-      lowerMessage.includes("menstrual")
+      lowerMessage.includes("menstrual") ||
+      lowerMessage.includes("hygiene")
     ) {
       return NextResponse.json({
         response: `Menstrual product availability in ${foundRegion.region} is rated ${foundRegion.sanitary}/5.`,
       });
     }
 
+    // ---------- CHILDCARE ----------
     if (
       lowerMessage.includes("childcare") ||
-      lowerMessage.includes("baby") ||
-      lowerMessage.includes("kid")
+      lowerMessage.includes("kid") ||
+      lowerMessage.includes("baby")
     ) {
       return NextResponse.json({
         response: `Childcare access in ${foundRegion.region} is rated ${foundRegion.childcare}/5.`,
       });
     }
 
+    // ---------- OVERALL ----------
     if (
       lowerMessage.includes("score") ||
       lowerMessage.includes("rating") ||
       lowerMessage.includes("safe")
     ) {
       return NextResponse.json({
-        response: `${foundRegion.region} has an overall community safety score of ${foundRegion.overall}/5 based on ${foundRegion.reviews} reviews.`,
+        response: `${foundRegion.region} has an overall safety score of ${foundRegion.overall}/5 based on ${foundRegion.reviews} community reviews.`,
       });
     }
 
     // ---------- DEFAULT ----------
     return NextResponse.json({
-      response: `${foundRegion.region} has an overall safety score of ${foundRegion.overall}/5.
+      response: `${foundRegion.region}
 
-Street Lighting: ${foundRegion.lighting}/5
-Public Toilets: ${foundRegion.toilets}/5
-Safe Transport: ${foundRegion.transport}/5
-Menstrual Products: ${foundRegion.sanitary}/5
-Childcare Access: ${foundRegion.childcare}/5
+⭐ Overall Score: ${foundRegion.overall}/5
 
-Latest community review:
+💡 Street Lighting: ${foundRegion.lighting}/5
+🚻 Public Toilets: ${foundRegion.toilets}/5
+🩸 Menstrual Products: ${foundRegion.sanitary}/5
+🚌 Safe Transport: ${foundRegion.transport}/5
+👶 Childcare Access: ${foundRegion.childcare}/5
+
+📝 Latest Review:
 "${foundRegion.latestComment}"`,
     });
   } catch (err) {
     console.error(err);
 
     return NextResponse.json({
-      response:
-        "Something went wrong while reading the community review data.",
+      response: "Something went wrong while fetching community reviews.",
     });
   }
 }

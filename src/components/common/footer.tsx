@@ -31,13 +31,17 @@ export default function Footer() {
               <div className="flex items-center gap-3">
                 <FolderGit2 size={18} />
 
-                <span>GitHub Repository</span>
+                <a href="https://github.com/pixel-angel/Project_Athena-v2v" className="pointer-cursor">GitHub Repository</a>
               </div>
 
               <div className="flex items-center gap-3">
                 <Mail size={18} />
 
-                <span>yourteam@email.com</span>
+                <pre>
+                  Anju Sinha
+                  Kashish
+                  Alisha Singh
+                </pre>
               </div>
             </div>
           </div>
