@@ -41,7 +41,7 @@ export async function POST(req: Request) {
         regionReviews.reduce((sum, r) => sum + Number(r[key]), 0) /
         regionReviews.length;
 
-      const lighting = avg("street_lighting");
+      const lighting = avg("street_lightening");
       const toilets = avg("public_toilets");
       const sanitary = avg("menstrual_products");
       const transport = avg("safe_transport");

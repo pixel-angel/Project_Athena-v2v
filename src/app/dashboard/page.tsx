@@ -1,10 +1,14 @@
 "use client";
+
 import { useSearchParams } from "next/navigation";
-import reviews from "@/data/reviews.json";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import StatsCards from "@/components/dashboard/StatsCard";
 import AccessibilityRadar from "@/components/dashboard/AccessibilityRadar";
 import ReviewList from "@/components/dashboard/ReviewList";
+
 import { PencilLine, Bot } from "lucide-react";
 import Link from "next/link";
 import Navbar from "@/components/common/Navbar";
@@ -12,26 +16,48 @@ import Footer from "@/components/common/footer";
 
 export default function DashboardPage() {
   const params = useSearchParams();
-
   const region = params.get("region") || "Connaught Place";
 
-  const regionReviews = reviews.filter((review) => review.region === region);
+  const [regionReviews, setRegionReviews] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchReviews() {
+      const { data, error } = await supabase
+        .from("reviews")
+        .select("*")
+        .eq("region", region);
+
+      if (error) {
+        console.error(error);
+      } else {
+        setRegionReviews(data || []);
+      }
+
+      setLoading(false);
+    }
+
+    fetchReviews();
+  }, [region]);
 
   function average(key: string) {
+    if (regionReviews.length === 0) return 0;
+
     const nums = regionReviews
+      .map((r) => Number(r[key]))
+      .filter((x) => !isNaN(x));
 
-      .map((r: any) => r[key])
-
-      .filter((x) => x != null);
+    if (nums.length === 0) return 0;
 
     return nums.reduce((a, b) => a + b, 0) / nums.length;
   }
 
-  const lighting = average("streetLighting");
-  const toilets = average("publicToilets");
-  const menstrual = average("menstrualProducts");
-  const transport = average("safeTransport");
-  const childcare = average("childcareAccess");
+  const lighting = average("street_lightening");
+  const toilets = average("public_toilets");
+  const menstrual = average("menstrual_products");
+  const transport = average("safe_transport");
+  const childcare = average("childcare_access");
+
   const overall = (lighting + toilets + menstrual + transport + childcare) / 5;
 
   const features = [
@@ -84,6 +110,14 @@ export default function DashboardPage() {
     },
   ];
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-xl font-semibold">
+        Loading Dashboard...
+      </div>
+    );
+  }
+
   return (
     <div>
       <Navbar />
@@ -92,7 +126,6 @@ export default function DashboardPage() {
         <DashboardHeader region={region} score={overall} />
 
         <StatsCards
-          // overall={overall}
           reviews={regionReviews.length}
           strongest={strongest}
           weakest={weakest}
@@ -101,6 +134,7 @@ export default function DashboardPage() {
         <AccessibilityRadar data={chartData} />
 
         <ReviewList reviews={regionReviews} />
+
         <div className="fixed bottom-8 right-8 flex flex-col gap-4 z-50">
           <Link
             href={`/assistant?region=${encodeURIComponent(region)}`}
@@ -125,6 +159,7 @@ export default function DashboardPage() {
           </Link>
         </div>
       </div>
+
       <Footer />
     </div>
   );
