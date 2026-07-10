@@ -1,8 +1,74 @@
 "use client";
 
+import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 import StarRating from "./StarRating";
 
 export default function ReviewForm() {
+  const [region, setRegion] = useState("");
+
+  const [streetLighting, setStreetLighting] = useState(0);
+  const [publicToilets, setPublicToilets] = useState(0);
+  const [menstrualProducts, setMenstrualProducts] = useState(0);
+  const [safeTransport, setSafeTransport] = useState(0);
+  const [childcareAccess, setChildcareAccess] = useState(0);
+
+  const [comment, setComment] = useState("");
+  const [photo, setPhoto] = useState<File | null>(null);
+  const handleSubmit = async () => {
+  try {
+    let imageUrl = "";
+
+    // Upload image if selected
+    if (photo) {
+      const fileName = `${Date.now()}-${photo.name}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("review-images")
+        .upload(fileName, photo);
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage
+        .from("review-images")
+        .getPublicUrl(fileName);
+
+      imageUrl = data.publicUrl;
+    }
+
+    // Save review to database
+    const { error } = await supabase.from("Reviews").insert([
+      {
+        region,
+        street_lightening: streetLighting,
+        public_toilets: publicToilets,
+        menstrual_products: menstrualProducts,
+        safe_transport: safeTransport,
+        childcare_access: childcareAccess,
+        comment,
+        image_url: imageUrl,
+      },
+    ]);
+
+    if (error) throw error;
+
+    alert("✅ Review submitted successfully!");
+
+    // Reset form
+    setRegion("");
+    setStreetLighting(0);
+    setPublicToilets(0);
+    setMenstrualProducts(0);
+    setSafeTransport(0);
+    setChildcareAccess(0);
+    setComment("");
+    setPhoto(null);
+
+  } catch (error) {
+    console.error("Submission Error:", error);
+    alert("❌ Failed to submit review.");
+  }
+};
   return (
     <div className="max-w-3xl mx-auto bg-white rounded-3xl border border-[#ECE7F6] shadow-sm p-8">
 
@@ -26,6 +92,8 @@ export default function ReviewForm() {
         </label>
 
         <select
+          value={region}
+          onChange={(e) => setRegion(e.target.value)}
           className="
           w-full
           rounded-2xl
@@ -68,11 +136,40 @@ export default function ReviewForm() {
       {/* Ratings */}
 
       <div className="space-y-4">
-        <StarRating icon="💡" label="Street Lighting" />
-        <StarRating icon="🚻" label="Public Toilets" />
-        <StarRating icon="🩸" label="Menstrual Products" />
-        <StarRating icon="🚌" label="Safe Transport" />
-        <StarRating icon="👶" label="Childcare Access" />
+        <StarRating
+        icon="💡"
+        label="Street Lighting"
+        rating={streetLighting}
+        setRating={setStreetLighting}
+      />
+
+      <StarRating
+        icon="🚻"
+        label="Public Toilets"
+        rating={publicToilets}
+        setRating={setPublicToilets}
+      />
+
+      <StarRating
+        icon="🩸"
+        label="Menstrual Products"
+        rating={menstrualProducts}
+        setRating={setMenstrualProducts}
+      />
+
+      <StarRating
+        icon="🚌"
+        label="Safe Transport"
+        rating={safeTransport}
+        setRating={setSafeTransport}
+      />
+
+      <StarRating
+        icon="👶"
+        label="Childcare Access"
+        rating={childcareAccess}
+        setRating={setChildcareAccess}
+      />
       </div>
 
       {/* Experience */}
@@ -84,6 +181,8 @@ export default function ReviewForm() {
 
         <textarea
           rows={6}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
           placeholder="Tell us about accessibility in this area..."
           className="
           w-full
@@ -144,6 +243,7 @@ export default function ReviewForm() {
             type="file"
             accept="image/*"
             className="hidden"
+            onChange={(e) => setPhoto(e.target.files?.[0] ?? null)}
           />
         </label>
       </div>
@@ -151,6 +251,8 @@ export default function ReviewForm() {
       {/* Button */}
 
       <button
+      type="button"
+      onClick={handleSubmit}
         className="
         mt-10
         w-full
