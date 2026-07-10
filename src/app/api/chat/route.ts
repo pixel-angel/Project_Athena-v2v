@@ -187,11 +187,11 @@ export async function POST(req: Request) {
 📝 Latest Review:
 "${foundRegion.latestComment}"`,
     });
-  } catch (err) {
-    console.error(err);
+  } catch (err: any) {
+    console.error("API ERROR:", err);
 
     return NextResponse.json({
-      response: "Something went wrong while fetching community reviews.",
+      response: err.message ?? JSON.stringify(err),
     });
   }
 }
