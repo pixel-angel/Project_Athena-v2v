@@ -1,12 +1,14 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-
 import reviews from "@/data/reviews.json";
-
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
-
 import StatsCards from "@/components/dashboard/StatsCard";
+import AccessibilityRadar from "@/components/dashboard/AccessibilityRadar";
+
+import ReviewList from "@/components/dashboard/ReviewList";
+
+import Link from "next/link";
 
 export default function DashboardPage() {
   const params = useSearchParams();
@@ -73,6 +75,33 @@ export default function DashboardPage() {
 
   const weakest = features.reduce((a, b) => (a.value < b.value ? a : b)).name;
 
+  const chartData = [
+    {
+      feature: "Lighting",
+      rating: lighting,
+    },
+
+    {
+      feature: "Toilets",
+      rating: toilets,
+    },
+
+    {
+      feature: "Transport",
+      rating: transport,
+    },
+
+    {
+      feature: "Menstrual",
+      rating: menstrual,
+    },
+
+    {
+      feature: "Childcare",
+      rating: childcare,
+    },
+  ];
+
   return (
     <div className="max-w-7xl mx-auto py-10 px-6">
       <DashboardHeader region={region} score={overall} />
@@ -83,6 +112,19 @@ export default function DashboardPage() {
         strongest={strongest}
         weakest={weakest}
       />
+
+      <AccessibilityRadar data={chartData} />
+
+      <ReviewList reviews={regionReviews} />
+      <div className="mt-10 flex justify-center">
+        <Link
+          href={`/review?region=${encodeURIComponent(region)}`}
+          className="bg-violet-700 text-white px-8 py-3 rounded-xl hover:bg-violet-800 transition"
+        >
+          Write a Review
+        </Link>
+
+      </div>
     </div>
   );
 }
