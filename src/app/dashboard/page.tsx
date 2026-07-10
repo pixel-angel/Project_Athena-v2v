@@ -1,9 +1,6 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
-
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import StatsCards from "@/components/dashboard/StatsCard";
 import AccessibilityRadar from "@/components/dashboard/AccessibilityRadar";
@@ -13,51 +10,48 @@ import { PencilLine, Bot } from "lucide-react";
 import Link from "next/link";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/footer";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function DashboardPage() {
   const params = useSearchParams();
   const region = params.get("region") || "Connaught Place";
 
-  const [regionReviews, setRegionReviews] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+const [regionReviews, setRegionReviews] = useState<any[]>([]);
 
-  useEffect(() => {
-    async function fetchReviews() {
-      const { data, error } = await supabase
-        .from("reviews")
-        .select("*")
-        .eq("region", region);
+useEffect(() => {
+  async function loadReviews() {
+    const { data, error } = await supabase
+      .from("Reviews")
+      .select("*")
+      .eq("region", region)
+      .order("created_at", { ascending: false });
 
-      if (error) {
-        console.error(error);
-      } else {
-        setRegionReviews(data || []);
-      }
-
-      setLoading(false);
+    if (error) {
+      console.error(error);
+      return;
     }
 
-    fetchReviews();
-  }, [region]);
-
-  function average(key: string) {
-    if (regionReviews.length === 0) return 0;
-
-    const nums = regionReviews
-      .map((r) => Number(r[key]))
-      .filter((x) => !isNaN(x));
-
-    if (nums.length === 0) return 0;
-
-    return nums.reduce((a, b) => a + b, 0) / nums.length;
+    setRegionReviews(data || []);
   }
+
+  loadReviews();
+}, [region]);
+  function average(key: string) {
+  const nums = regionReviews
+    .map((r: any) => r[key])
+    .filter((x: any) => x != null);
+
+  if (nums.length === 0) return 0;
+
+  return nums.reduce((a: number, b: number) => a + b, 0) / nums.length;
+}
 
   const lighting = average("street_lightening");
   const toilets = average("public_toilets");
   const menstrual = average("menstrual_products");
   const transport = average("safe_transport");
   const childcare = average("childcare_access");
-
   const overall = (lighting + toilets + menstrual + transport + childcare) / 5;
 
   const features = [
