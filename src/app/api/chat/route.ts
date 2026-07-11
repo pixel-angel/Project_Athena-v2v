@@ -187,7 +187,7 @@ export async function POST(req: Request) {
 📝 Latest Review:
 "${foundRegion.latestComment}"`,
     });
-  } catch (err: any) {
+  } catch (err) {
     console.error("API ERROR:", err);
 
     return NextResponse.json({

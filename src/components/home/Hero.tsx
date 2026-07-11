@@ -33,7 +33,7 @@ export default function Hero() {
         </button>
 
         <button className="rounded-xl border-2 border-pink-600 px-8 py-3 font-semibold text-pink-600 transition hover:bg-[#f3e5f5] cursor-pointer">
-          Write a Review
+          <Link href="/review">Write a Review</Link>
         </button>
       </div>
 
@@ -61,7 +61,7 @@ export default function Hero() {
         <div className="rounded-3xl border bg-white p-8 shadow-lg">
           <div className="mb-6 flex items-center gap-3">
             <span className="text-3xl">🤖</span>
-            <h2 className="text-2xl font-bold text-violet-700">Ask Our Bot</h2>
+            <Link href="/assistant" className="text-2xl font-bold text-violet-700">Ask Our Bot</Link>
           </div>
 
           <div className="flex h-64 flex-col justify-center rounded-2xl bg-gray-50 px-6">
