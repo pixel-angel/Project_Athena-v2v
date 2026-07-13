@@ -39,8 +39,8 @@ export default function Footer() {
 
                 <pre>
                   Anju Sinha
-                  Kashish
-                  Alisha Singh
+                  • Kashish
+                  • Alisha Singh
                 </pre>
               </div>
             </div>
@@ -53,7 +53,6 @@ export default function Footer() {
           <p className="flex items-center gap-2">
             Made with
             <Heart size={16} className="text-pink-500 fill-pink-500" />
-            for IEEE SHE Aspire
           </p>
         </div>
       </div>

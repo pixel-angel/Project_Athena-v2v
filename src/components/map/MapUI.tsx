@@ -6,7 +6,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { cities } from "@/constants/cities";
 
-// ---------- Custom Marker ----------
+// ---------------- Marker ----------------
 function getMarkerIcon(score: number) {
   let color = "#22c55e";
 
@@ -53,6 +53,28 @@ export default function MapUI({
   activeFilter = "Overall",
   onMarkerClick,
 }: MapUIProps) {
+  const getScore = (city: any) => {
+    switch (activeFilter) {
+      case "Lighting":
+        return city.lighting ?? city.score;
+
+      case "Toilets":
+        return city.toilets ?? city.score;
+
+      case "Transport":
+        return city.transport ?? city.score;
+
+      case "Sanitary":
+        return city.sanitary ?? city.score;
+
+      case "Childcare":
+        return city.childcare ?? city.score;
+
+      default:
+        return city.score;
+    }
+  };
+
   return (
     <div className="w-full h-[500px] rounded-3xl overflow-hidden">
       <MapContainer
@@ -68,22 +90,30 @@ export default function MapUI({
 
         <MapController center={center} />
 
-        {cities.map((city) => (
-          <Marker
-            key={city.id}
-            position={city.coords as [number, number]}
-            icon={getMarkerIcon(city.score)}
-            eventHandlers={{
-              click: () => onMarkerClick?.(city.coords as [number, number]),
-            }}
-          >
-            <Popup>
-              <h3 className="font-semibold">{city.name}</h3>
-              <p>Accessibility Score: {city.score}</p>
-              <p>Viewing: {activeFilter}</p>
-            </Popup>
-          </Marker>
-        ))}
+        {cities.map((city) => {
+          const score = getScore(city);
+
+          return (
+            <Marker
+              key={city.id}
+              position={city.coords as [number, number]}
+              icon={getMarkerIcon(score)}
+              eventHandlers={{
+                click: () => onMarkerClick?.(city.coords as [number, number]),
+              }}
+            >
+              <Popup>
+                <h3 className="font-semibold">{city.name}</h3>
+
+                <p>
+                  <strong>{activeFilter}</strong>: {score}/5
+                </p>
+
+                <p>Overall: {city.score}/5</p>
+              </Popup>
+            </Marker>
+          );
+        })}
       </MapContainer>
     </div>
   );
