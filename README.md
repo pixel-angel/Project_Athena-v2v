@@ -1,35 +1,29 @@
 # 🌸 HerMap
 
-> Community-driven accessibility insights for women.
-
-HerMap is a web platform that helps women discover safer and more accessible public spaces through community-powered reviews and AI-assisted insights.
-
-Built for the **IEEE SHE Aspire Hackathon**.
+HerMap is a community-driven platform that helps women discover, evaluate, and share accessibility insights about public spaces. By combining real user experiences, interactive visualizations, and AI-powered assistance, HerMap makes it easier to identify locations that better support everyday mobility and accessibility needs.
 
 ---
 
-## ✨ Features
+## ✨ What HerMap Offers
 
-### 🗺 Interactive Map
+### 🗺️ Explore the Map
+- Browse regions through an interactive map
+- View community accessibility scores
+- Discover accessible public spaces
+- Navigate directly to region dashboards
 
-- Browse regions on an interactive map
-- View accessibility ratings
-- Explore community insights
+### 📊 Accessibility Dashboard
+Gain a detailed overview of every region with:
 
----
+- Overall Accessibility Score
+- Radar Chart Analysis
+- Community Statistics
+- Category-wise Ratings
+- Recent Community Reviews
 
-### 📊 Region Dashboard
+### ✍️ Share Your Experience
 
-- Overall accessibility score
-- Radar chart visualization
-- Community statistics
-- Recent reviews
-
----
-
-### ✍ Community Reviews
-
-Users can rate locations based on:
+Help others by rating locations based on:
 
 - 💡 Street Lighting
 - 🚻 Public Toilets
@@ -37,47 +31,45 @@ Users can rate locations based on:
 - 🚌 Safe Transport
 - 👶 Childcare Access
 
-Optional:
+You can also add:
 
-- Comments
-- Photo upload
+- 💬 Comments
+- 📷 Photos
 
----
+### 🤖 HerBot AI Assistant
 
-### 🤖 AI Assistant
+Ask questions naturally, such as:
 
-Ask questions like:
-
-- Compare Delhi and Bangalore
-- Which region has better lighting?
-- Suggest safer areas nearby
+- *Which region has the best lighting?*
+- *Compare Delhi and Bangalore.*
+- *Suggest accessible areas nearby.*
+- *Summarize reviews for Connaught Place.*
 
 ---
 
 ## 🛠 Tech Stack
 
-- Next.js 15
-- React
-- TypeScript
-- Tailwind CSS
-- Leaflet
-- React Leaflet
-- Recharts
-- Firebase (planned)
-- Gemini API (planned)
+| Category | Technologies |
+|-----------|--------------|
+| Framework | Next.js |
+| Frontend | React · TypeScript |
+| Styling | Tailwind CSS |
+| Maps | Leaflet · React Leaflet |
+| Visualization | Recharts |
 
 ---
 
 ## 📂 Project Structure
-src/
-│
-├── app/
-├── components/
-├── constants/
-├── data/
-├── hooks/
-├── lib/
 
+```text
+src
+├── app/            # Application routes
+├── components/     # UI components
+├── constants/      # Static constants
+├── data/           # Mock & review data
+├── hooks/          # Custom hooks
+└── lib/            # Utilities
+```
 
 ---
 
@@ -87,20 +79,36 @@ Clone the repository
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/hermap.git
+```
+
+Install dependencies
+
+```bash
 npm install
+```
+
+Start the development server
+
+```bash
 npm run dev
 ```
+
+Open **http://localhost:3000** in your browser.
+
 ---
-📸 Screenshots
-##Home
-![](public/screenshots/Home.png)
-##Map
-![](public/screenshots/map2.png)
-##dashboard
-![](public/screenshots/dashboard.png)
-![](public/screenshots/dahboard2.png)
-##Review Form
-![](public/screenshots/submit%20review.png)
-##HerBOt
-![](public/screenshots/assisstant.png)
----
+
+## 📸 Preview
+
+<p align="center">
+  <img src="public/screenshots/Home.png" width="280"/>
+  <img src="public/screenshots/map2.png" width="280"/>
+  <img src="public/screenshots/dashboard.png" width="280"/>
+</p>
+
+<p align="center">
+  <img src="public/screenshots/dahboard2.png" width="280"/>
+  <img src="public/screenshots/submit%20review.png" width="280"/>
+  <img src="public/screenshots/assisstant.png" width="280"/>
+</p>
+</tr>
+</table>
